@@ -1,25 +1,80 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext, createContext, useEffect } from "react";
 
-function App() {
+import "./App.css";
+import { Link, Route, Routes, Navigate, useLocation } from "react-router-dom";
+
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Protected from "./pages/Protected";
+import Header from "./components/Header";
+import NoMatch from "./pages/NoMatch";
+
+export default function App() {
+  useEffect(() => {}, []);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="">
+      <Header />
+      {/* <ul>
+        <li>
+          <Link to="/">Home</Link>
+        </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
+        <li>
+          <Link to="/register">Register</Link>
+        </li>
+        <li>
+          <Link to="/protected">Protected</Link>
+        </li>
+      </ul> */}
+
+      {/* <hr /> */}
+
+      <Routes>
+        <Route /*element={<Layout />}*/>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/protected"
+            element={
+              <RequireAuth>
+                <Protected />
+              </RequireAuth>
+            }
+          />
+          <Route path="*" element={<NoMatch />} />
+        </Route>
+      </Routes>
     </div>
   );
 }
 
-export default App;
+function RequireAuth({ children }) {
+  let auth = useAuth();
+  let location = useLocation();
+
+  if (auth?.loading) {
+    // If we're still loading the user from localStorage, then we don't know
+    // whether or not they're authenticated, so we'll show a loading indicator.
+    return <div>Loading...</div>;
+  }
+
+  if (!auth?.user) {
+    // Redirect them to the /login page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that page after they login, which is a nicer user experience
+    // than dropping them off on the home page.
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
+
+let AuthContext = createContext({ loading: true });
+
+function useAuth() {
+  return useContext(AuthContext);
+}
