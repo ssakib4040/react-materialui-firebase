@@ -10,12 +10,16 @@ import Protected from "./pages/Protected";
 import Header from "./components/Header";
 import NoMatch from "./pages/NoMatch";
 
+import AuthProvider, { useAuth } from "./utils/AuthProvider";
+
 export default function App() {
-  useEffect(() => {}, []);
+  const data = useAuth();
+
   return (
-    <div className="">
-      <Header />
-      {/* <ul>
+    <AuthProvider>
+      <div>
+        <Header />
+        {/* <ul>
         <li>
           <Link to="/">Home</Link>
         </li>
@@ -30,31 +34,32 @@ export default function App() {
         </li>
       </ul> */}
 
-      {/* <hr /> */}
-
-      <Routes>
-        <Route /*element={<Layout />}*/>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route
-            path="/protected"
-            element={
-              <RequireAuth>
-                <Protected />
-              </RequireAuth>
-            }
-          />
-          <Route path="*" element={<NoMatch />} />
-        </Route>
-      </Routes>
-    </div>
+        <Routes>
+          <Route /*element={<Layout />}*/>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route
+              path="/protected"
+              element={
+                <RequireAuth>
+                  <Protected />
+                </RequireAuth>
+              }
+            />
+            <Route path="*" element={<NoMatch />} />
+          </Route>
+        </Routes>
+      </div>
+    </AuthProvider>
   );
 }
 
 function RequireAuth({ children }) {
   let auth = useAuth();
   let location = useLocation();
+
+  console.log(auth);
 
   if (auth?.loading) {
     // If we're still loading the user from localStorage, then we don't know
@@ -71,10 +76,4 @@ function RequireAuth({ children }) {
   }
 
   return children;
-}
-
-let AuthContext = createContext({ loading: true });
-
-function useAuth() {
-  return useContext(AuthContext);
 }
