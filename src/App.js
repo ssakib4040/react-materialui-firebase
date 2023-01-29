@@ -59,15 +59,15 @@ function RequireAuth({ children }) {
   let auth = useAuth();
   let location = useLocation();
 
-  console.log(auth);
+  console.log("auth", auth);
 
-  if (auth?.loading) {
+  if (auth?.user?.loading) {
     // If we're still loading the user from localStorage, then we don't know
     // whether or not they're authenticated, so we'll show a loading indicator.
     return <div>Loading...</div>;
   }
 
-  if (!auth?.user) {
+  if (!auth?.user?.user) {
     // Redirect them to the /login page, but save the current location they were
     // trying to go to when they were redirected. This allows us to send them
     // along to that page after they login, which is a nicer user experience

@@ -13,6 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link, useNavigate } from "react-router-dom";
+import { getAuth, signOut } from "firebase/auth";
 
 const pages = ["Home", "Login", "Register", "Protected"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -36,6 +37,13 @@ export default function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+
+    const auth = getAuth();
+    signOut(auth)
+      .then(() => {
+        navigate("/login");
+      })
+      .catch((error) => {});
   };
 
   return (
@@ -168,11 +176,25 @@ export default function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
+
+              <MenuItem>
+                <Typography textAlign="center">Item 1</Typography>
+              </MenuItem>
+
+              <MenuItem>
+                <Typography textAlign="center">Item 2</Typography>
+              </MenuItem>
+
+              <MenuItem>
+                <Typography textAlign="center">Item 3</Typography>
+              </MenuItem>
+
+              <MenuItem onClick={handleCloseUserMenu}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>
