@@ -14,6 +14,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { Link, useNavigate } from "react-router-dom";
 import { getAuth, signOut } from "firebase/auth";
+import { useAuth } from "../utils/AuthProvider";
 
 const pages = ["Home", "Login", "Register", "Protected"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -23,6 +24,11 @@ export default function Header() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const navigate = useNavigate();
+  const isAuth = useAuth();
+
+  // console.log();
+
+  console.log(isAuth?.user?.user);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -154,7 +160,7 @@ export default function Header() {
             </Button>
           </Box>
 
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0 }} display={!isAuth?.user?.user && "none"}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />

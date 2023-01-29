@@ -59,8 +59,6 @@ function RequireAuth({ children }) {
   let auth = useAuth();
   let location = useLocation();
 
-  console.log("auth", auth);
-
   if (auth?.user?.loading) {
     // If we're still loading the user from localStorage, then we don't know
     // whether or not they're authenticated, so we'll show a loading indicator.
