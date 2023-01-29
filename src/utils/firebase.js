@@ -4,7 +4,9 @@ import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   signOut,
+  updateProfile 
 } from "firebase/auth";
 
 // TODO: Add SDKs for Firebase products that you want to use
@@ -25,4 +27,11 @@ const app = initializeApp(firebaseConfig);
 
 export default app;
 
-export { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut };
+export {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile
+};

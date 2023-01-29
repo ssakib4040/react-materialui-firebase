@@ -12,6 +12,12 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
+import { toast } from "react-toastify";
 
 function Copyright(props) {
   return (
@@ -33,14 +39,57 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function Login() {
+export default function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    const email = data.get("email");
+    const password = data.get("password");
+    const fullName = data.get("fullName");
+
+    if (email === "" || password === "" || fullName === "") {
+      toast("Please fill all the fields", { type: "error" });
+      return;
+    }
+
+    createUserWithEmailAndPassword(
+      getAuth(),
+      data.get("email"),
+      data.get("password")
+    )
+      .then((userCredential) => {
+        // userCredential.user.updateProfile({
+        //   displayName: data.get("fullName"),
+        // });
+
+        updateProfile(getAuth().currentUser, {
+          displayName: data.get("fullName"),
+        })
+          .then(() => {
+            // Profile updated!
+            toast.success("Account created successfully");
+          })
+          .catch((error) => {
+            console.log(error);
+            // An error occurred
+          });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+
+        switch (errorCode) {
+          case "auth/email-already-in-use":
+            toast.error("Email already in use");
+            break;
+          case "auth/invalid-email":
+            toast.error("Invalid email");
+            break;
+          default:
+            toast.error(errorMessage);
+        }
+      });
   };
 
   return (
