@@ -196,7 +196,12 @@ export default function Header() {
                 <Typography textAlign="center">Item 3</Typography>
               </MenuItem>
 
-              <MenuItem onClick={handleClick}>
+              <MenuItem
+                onClick={() => {
+                  handleClick();
+                  handleCloseUserMenu();
+                }}
+              >
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
             </Menu>
