@@ -135,7 +135,6 @@ export default function Register() {
               label="Email Address"
               name="email"
               autoComplete="email"
-              autoFocus
             />
 
             <TextField
