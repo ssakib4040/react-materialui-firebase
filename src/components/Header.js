@@ -26,10 +26,6 @@ export default function Header() {
   const navigate = useNavigate();
   const isAuth = useAuth();
 
-  // console.log();
-
-  console.log(isAuth?.user?.user);
-
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };

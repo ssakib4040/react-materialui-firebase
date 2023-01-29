@@ -1,7 +1,8 @@
 import { useContext, createContext, useEffect } from "react";
+import { Link, Route, Routes, Navigate, useLocation } from "react-router-dom";
 
 import "./App.css";
-import { Link, Route, Routes, Navigate, useLocation } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.css";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -11,6 +12,7 @@ import Header from "./components/Header";
 import NoMatch from "./pages/NoMatch";
 
 import AuthProvider, { useAuth } from "./utils/AuthProvider";
+import { ToastContainer } from "react-toastify";
 
 export default function App() {
   const data = useAuth();
@@ -51,6 +53,7 @@ export default function App() {
           </Route>
         </Routes>
       </div>
+      <ToastContainer />
     </AuthProvider>
   );
 }

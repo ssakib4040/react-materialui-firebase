@@ -1,4 +1,5 @@
 import React from "react";
+import { toast } from "react-toastify";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import { useAuth } from "../utils/AuthProvider";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
@@ -42,24 +44,35 @@ export default function Login() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    console.log(data.get("email"), data.get("password"));
-
     signInWithEmailAndPassword(
       getAuth(),
       data.get("email"),
       data.get("password")
     )
       .then((userCredential) => {
-        // Signed in
         const user = userCredential.user;
-        console.log(user);
-        // ...
+        toast("Login successful", { type: "success" });
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
 
-        console.log(errorMessage);
+        switch (errorCode) {
+          case "auth/invalid-email":
+            toast("Invalid email", { type: "error" });
+            break;
+          case "auth/user-disabled":
+            toast("User disabled", { type: "error" });
+            break;
+          case "auth/user-not-found":
+            toast("User not found", { type: "error" });
+            break;
+          case "auth/wrong-password":
+            toast("Wrong password", { type: "error" });
+            break;
+          default:
+            toast("Unknown error", { type: "error" });
+        }
       });
   };
 
