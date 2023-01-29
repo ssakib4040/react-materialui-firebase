@@ -39,7 +39,9 @@ export default function Header() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
 
+  const handleClick = (event) => {
     const auth = getAuth();
     signOut(auth)
       .then(() => {
@@ -194,7 +196,7 @@ export default function Header() {
                 <Typography textAlign="center">Item 3</Typography>
               </MenuItem>
 
-              <MenuItem onClick={handleCloseUserMenu}>
+              <MenuItem onClick={handleClick}>
                 <Typography textAlign="center">Logout</Typography>
               </MenuItem>
             </Menu>
